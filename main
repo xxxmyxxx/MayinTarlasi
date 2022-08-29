@@ -1,0 +1,16 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scan=new Scanner(System.in);
+        System.out.println("Mayin Tarlasi Oyununa Hosgeldiniz Kuzularim..(iplikci nedim)");
+        System.out.print("Satir giriniz: ");
+        int a= scan.nextInt();
+        System.out.print("Sutun giriniz: ");
+        int b= scan.nextInt();
+
+        MineField m=new MineField(a,b);
+
+        m.run();
+    }
+}
