@@ -1,0 +1,195 @@
+package MayinTarlasi;
+import java.util.Random;
+import java.util.Scanner;
+
+
+public class MineField {
+    // öncelikle kullanacağımız metaryelleri yazıyoruz.
+    int row;
+    int col;
+    char[][] map;
+    char[][] board;
+    int mineNumbers;
+    int satir;
+    int sutun;
+
+    Random rand = new Random();
+    Scanner scan = new Scanner(System.in);
+
+
+    MineField(int row, int col) {    // constructor (kurucu) metodu oluşturduk.
+        this.row = row;               // ve değerlere ulaşabilmek için this. ifadesi ile eşitledik
+        this.col = col;
+        this.map = new char[row][col];
+        this.board = new char[row][col];
+        this.mineNumbers = row * col / 4;
+
+        getInput();
+
+    }
+    void mineLocation(){
+        for (int i=0; i<mineNumbers; i++){  // mayın sayısına kadar dön
+            while(true){
+                int a=(int)(Math.random()*this.row);
+                int b=(int)(Math.random()*this.col);
+                if(map[a][b] !='*')
+                    map[a][b]='*';
+                break;
+            }
+        }
+    }
+    void printMineMap(){
+        System.out.println("Mayinli Harita");
+        mineLocation();
+        for(int i=0; i< map.length; i++){
+            for(int j=0; j<map[0].length; j++){
+                if(map[i][j] !='*'){
+                    map[i][j]='-';
+                }
+                System.out.print(map[i][j]+" ");
+            }
+            System.out.println();
+        }
+        System.out.println("===========");
+    }
+    void printBoard(){
+        for(int i=0; i< this.board.length; i++){
+            for(int j=0; j<this.board[i].length; j++){
+                System.out.print(this.board[i][j]+" ");
+            }
+            System.out.println();
+        }
+    }
+    void getInput(){
+        boolean isTrue= false;
+        Scanner scan=new Scanner(System.in);
+        System.out.println("Satir ve Sutun giriniz: ");
+        System.out.print("Satir giriniz: ");
+        satir=(scan.nextInt()-1);
+        System.out.print("Sutun giriniz: ");
+        sutun=(scan.nextInt()-1);
+        while(!isTrue){
+            if( satir<0 || satir> board.length-1 || sutun<0 || sutun> board.length-1){
+                System.out.println("Hatali bir sayi girdiniz.. !!: ");
+                System.out.print("Satir giriniz: ");
+                satir=(scan.nextInt()-1);
+                System.out.print("Sutun giriniz: ");
+                sutun=(scan.nextInt()-1);
+            }else{
+                isTrue=true;
+            }
+            System.out.println("==============");
+        }
+    }
+    public int neighboringSquares(){
+        int sideNumber=0;
+        if(sutun+1< map[0].length-1){
+            if(map[satir][sutun+1]== '*')
+                sideNumber++;
+        }
+        if(sutun-1>=0 ) {
+            if (map[satir][sutun - 1] == '*')
+                sideNumber++;
+        }
+        if(sutun+1< map[0].length-1) {
+            if (map[satir+1][sutun ] == '*')
+                sideNumber++;
+        }
+        if(sutun-1>=0) {
+            if (map[satir-1][sutun ] == '*')
+                sideNumber++;
+        }
+        if(sutun-1 >=0 && sutun-1 >=0) {
+            if (map[satir - 1][sutun - 1] == '*')
+                sideNumber++;
+        }
+        if(sutun-1 >=0 && sutun+1 < map[0].length-1) {
+            if (map[satir - 1][sutun +1] == '*')
+                sideNumber++;
+        }
+        if(sutun+1 < map.length-1 && sutun-1>=0) {
+            if (map[satir + 1][sutun -1] == '*')
+                sideNumber++;
+        }
+        if(satir+1 < map.length-1 && sutun+1< map[0].length-1) {
+            if (map[satir + 1][sutun +1] == '*')
+                sideNumber++;
+
+        }return sideNumber;
+
+
+    }
+    public void falan(){
+        switch (neighboringSquares()){
+            case 0:
+                board[satir][sutun]='0';
+                map[satir][sutun]='0';
+                break;
+            case 1:
+                board[satir][sutun]='1';
+                map[satir][sutun]='1';
+                break;
+            case 2:
+                board[satir][sutun]='2';
+                map[satir][sutun]='2';
+                break;
+            case 3:
+                board[satir][sutun]='3';
+                map[satir][sutun]='3';
+                break;
+            case 4:
+                board[satir][sutun]='4';
+                map[satir][sutun]='4';
+                break;
+            case 5:
+                board[satir][sutun]='5';
+                map[satir][sutun]='5';
+                break;
+            case 6:
+                board[satir][sutun]='6';
+                map[satir][sutun]='6';
+                break;
+            case 7:
+                board[satir][sutun]='7';
+                map[satir][sutun]='7';
+                break;
+
+
+        }
+
+    }
+    boolean checkContinue(){
+        for(int i=0; i< map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                if (map[i][j] == '-') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public void run(){
+        printMineMap();
+
+        System.out.println("----------------------");
+        printBoard();
+
+        while(true){
+            this.getInput();
+            if(map[satir][sutun]=='*'){
+                System.out.println("Mayina bastin.");
+                System.out.println("Game Over !!!");
+                break;
+            }else{
+                falan();
+                printBoard();
+                if(checkContinue()){
+                    System.out.println("Tebrikler.Kazandiniz..");
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
